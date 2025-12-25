@@ -1,17 +1,20 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { 
   LayoutDashboard, 
   Package, 
   AlertTriangle, 
   FileText, 
   TrendingUp,
-  Settings,
-  BoxesIcon
+  LogOut,
+  BoxesIcon,
+  User
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Inventory", href: "/inventory", icon: Package },
   { name: "Alerts", href: "/alerts", icon: AlertTriangle },
   { name: "Analytics", href: "/analytics", icon: TrendingUp },
@@ -20,6 +23,13 @@ const navigation = [
 
 export function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/auth');
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-border bg-card">
@@ -35,7 +45,8 @@ export function Sidebar() {
         {/* Navigation */}
         <nav className="flex-1 space-y-1 px-3 py-4">
           {navigation.map((item) => {
-            const isActive = location.pathname === item.href;
+            const isActive = location.pathname === item.href || 
+              (item.href === '/dashboard' && location.pathname === '/');
             return (
               <Link
                 key={item.name}
@@ -54,15 +65,28 @@ export function Sidebar() {
           })}
         </nav>
 
-        {/* Settings */}
-        <div className="border-t border-border p-3">
-          <Link
-            to="/settings"
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground transition-all hover:bg-secondary hover:text-foreground"
+        {/* User & Sign Out */}
+        <div className="border-t border-border p-3 space-y-2">
+          {user && (
+            <div className="flex items-center gap-3 rounded-lg px-3 py-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                <User className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">
+                  {user.email}
+                </p>
+              </div>
+            </div>
+          )}
+          <Button
+            variant="ghost"
+            className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground"
+            onClick={handleSignOut}
           >
-            <Settings className="h-5 w-5" />
-            Settings
-          </Link>
+            <LogOut className="h-5 w-5" />
+            Sign Out
+          </Button>
         </div>
       </div>
     </aside>

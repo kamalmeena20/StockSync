@@ -1,43 +1,31 @@
-import { AlertTriangle, Package, TrendingDown, Trash2 } from "lucide-react";
+import { AlertTriangle, Package, TrendingDown, Trash2, CheckCircle, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useAlerts } from "@/hooks/useAlerts";
+import { formatDistanceToNow } from "date-fns";
 
-const alerts = [
-  {
-    id: 1,
-    type: "dead_stock",
-    title: "Steel Rods (8mm) - Dead Stock",
-    description: "No movement for 90+ days. Consider liquidation.",
-    severity: "warning",
-    icon: Package,
-  },
-  {
-    id: 2,
-    type: "low_stock",
-    title: "Cement (PPC) - Low Stock",
-    description: "Only 50 bags remaining. Reorder point: 200 bags.",
-    severity: "destructive",
-    icon: TrendingDown,
-  },
-  {
-    id: 3,
-    type: "damaged",
-    title: "Bricks (Red) - Damaged Inventory",
-    description: "15% damage rate detected. Check storage conditions.",
-    severity: "destructive",
-    icon: Trash2,
-  },
-  {
-    id: 4,
-    type: "slow_moving",
-    title: "Tiles (Ceramic 2x2) - Slow Moving",
-    description: "Sales velocity dropped 40% in last quarter.",
-    severity: "warning",
-    icon: AlertTriangle,
-  },
-];
+const typeIcons = {
+  dead_stock: Package,
+  low_stock: TrendingDown,
+  damaged: Trash2,
+  expiring: AlertTriangle,
+  slow_moving: AlertTriangle,
+};
 
 export function AlertsList() {
+  const { data: alerts, isLoading } = useAlerts();
+  const activeAlerts = alerts?.filter(a => !a.is_resolved).slice(0, 4) || [];
+
+  if (isLoading) {
+    return (
+      <Card className="shadow-card">
+        <CardContent className="flex items-center justify-center h-48">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card className="shadow-card">
       <CardHeader className="pb-4">
@@ -47,29 +35,43 @@ export function AlertsList() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {alerts.map((alert) => (
-          <div
-            key={alert.id}
-            className="flex items-start gap-4 rounded-lg border border-border p-4 transition-colors hover:bg-secondary/50"
-          >
-            <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
-              alert.severity === "destructive" ? "bg-destructive/10" : "bg-warning/10"
-            }`}>
-              <alert.icon className={`h-5 w-5 ${
-                alert.severity === "destructive" ? "text-destructive" : "text-warning"
-              }`} />
-            </div>
-            <div className="flex-1 space-y-1">
-              <div className="flex items-center justify-between">
-                <p className="font-medium text-foreground">{alert.title}</p>
-                <Badge variant={alert.severity === "destructive" ? "destructive" : "warning"}>
-                  {alert.type.replace("_", " ")}
-                </Badge>
-              </div>
-              <p className="text-sm text-muted-foreground">{alert.description}</p>
-            </div>
+        {activeAlerts.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <CheckCircle className="h-10 w-10 mx-auto mb-3 text-success" />
+            <p>No active alerts. Your inventory is healthy!</p>
           </div>
-        ))}
+        ) : (
+          activeAlerts.map((alert) => {
+            const Icon = typeIcons[alert.type] || AlertTriangle;
+            const isDestructive = alert.severity === "critical";
+            return (
+              <div
+                key={alert.id}
+                className="flex items-start gap-4 rounded-lg border border-border p-4 transition-colors hover:bg-secondary/50"
+              >
+                <div className={`flex h-10 w-10 items-center justify-center rounded-lg ${
+                  isDestructive ? "bg-destructive/10" : "bg-warning/10"
+                }`}>
+                  <Icon className={`h-5 w-5 ${
+                    isDestructive ? "text-destructive" : "text-warning"
+                  }`} />
+                </div>
+                <div className="flex-1 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium text-foreground">{alert.title}</p>
+                    <Badge variant={isDestructive ? "destructive" : "warning"}>
+                      {alert.type.replace("_", " ")}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">{alert.description}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {formatDistanceToNow(new Date(alert.created_at), { addSuffix: true })}
+                  </p>
+                </div>
+              </div>
+            );
+          })
+        )}
       </CardContent>
     </Card>
   );
