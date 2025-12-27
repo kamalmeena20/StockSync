@@ -1,73 +1,84 @@
-# Welcome to your Lovable project
+Inventory Management System
 
-## Project info
+A web-based inventory management system designed to help material businesses track stock levels, monitor
+alerts, and analyze inventory performance through a centralized dashboard.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+Project Overview:
 
-## How can I edit this code?
+This project provides a structured solution for managing inventory operations such as stock tracking, alert handling, 
+and performance analysis. It is built with a modern frontend stack and integrates real-time data handling to support 
+efficient inventory management.
 
-There are several ways of editing your application.
+Key objectives of the system include:
 
-**Use Lovable**
+1. Improving visibility into inventory levels
+2. Identifying low stock and dead stock items
+3. Providing analytical insights for better decision-making
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Features:
 
-Changes made via Lovable will be committed automatically to this repo.
+User authentication (sign up and login)
+Inventory management (add, view, and search items)
+Dashboard with key inventory metrics
+Alerts for low stock and critical conditions
+Analytics including inventory turnover, stock aging, and ABC analysis
+Responsive and clean user interface
 
-**Use your preferred IDE**
+Technology Stack:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Frontend Setup: Vite + React
+UI & Styling: Tailwind CSS, shadcn/ui
+State & Data Fetching: React Query
+Backend & Database: Supabase
+Authentication: Supabase Auth
+Data Visualization: Recharts
+Icons: Lucide Icons
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Follow these steps:
+Project Structure
+src/
+├── components/        # Reusable UI and layout components
+├── pages/             # Application pages (Dashboard, Inventory, Alerts, Analytics)
+├── hooks/             # Custom hooks for data fetching and logic
+├── lib/               # Utility functions and helpers
+├── styles/            # Global styles
+└── App.tsx            # Application entry point
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+Getting Started (Local Setup)
+Prerequisites
+
+Node.js (v16 or later)
+
+npm
+
+Installation Steps
+# Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to the project directory
+cd StockSync|Insyd AI
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
-```
 
-**Edit a file directly in GitHub**
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The application will start locally with hot reloading enabled.
 
-**Use GitHub Codespaces**
+*System Architecture (High-Level):
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The system follows a client–server architecture where a React-based frontend interacts with 
+backend services for authentication, inventory data management, alerts, and analytics. 
+All data is centrally managed to ensure consistency and real-time updates.
 
-## What technologies are used for this project?
 
-This project is built with:
+Assumptions:
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Users have access to a basic digital device and stable internet connectivity.
+Inventory data is entered accurately into the system.
+Users follow standard inventory handling practices.
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Conclusion:
+This inventory management system provides an organized and technology-driven approach to handling inventory operations. By integrating tracking, alerts, and analytics, it supports efficient inventory management and informed operational decisions.
