@@ -53,7 +53,7 @@ npm
 
 Installation Steps
 # Clone the repository
-git clone <YOUR_GIT_URL>
+git clone https://github.com/kamalmeena20/StockSync
 
 # Navigate to the project directory
 cd StockSync|Insyd AI
